@@ -1,0 +1,282 @@
+swagger: "2.0"
+info:
+  description: "Swagger doc for Shopify Online Marketplace service"
+  version: "1.0.0"
+  title: "BE"
+tags:
+- name: "auth"
+- name: "cart"
+- name: "product"
+schemes:
+- "http"
+paths:
+  /register:
+    post:
+      tags:
+      - "auth"
+      summary: "Create a new user"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "Success"
+        409:
+          description: "Username already in use"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Error"
+  /login:
+    post:
+      tags:
+      - "auth"
+      summary: "Login as user"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              token:
+                description: "JWT token"
+                type: "string"
+        401:
+          description: "Authentication error"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Error"
+  /verify:
+    get:
+      tags:
+      - "auth"
+      summary: "Verify JWT token is valid"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Success, JWT is valid"
+        401:
+          description: "Authentication error, JWT is invalid"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Error"
+  /products:
+    get:
+      tags:
+      - "product"
+      summary: "Get list of products"
+      parameters:
+      - name: "available"
+        in: query
+        description: "If available is true then only products with inventory greater than 0 are returned"
+        type: boolean
+        required: false
+      responses:
+        200:
+          description: "Success"
+          schema: 
+            type: array
+            items:
+              $ref: "#/definitions/Product"
+        500:
+          description: "Error"
+  /purchase/{productTitle}:
+    post:
+      tags:
+      - "product"
+      summary: "Purchase a single product"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      - name: "productTitle"
+        in: path
+        required: true
+        description: "Title of product to purchase"
+        type: "string"
+      responses:
+        204:
+          description: "Success, product was purchased"
+        400:
+          description: "Product is out of inventory, product was not purchased"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Product does not exist, product was not purchased"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Error"
+  /cart:
+    get:
+      tags:
+      - "cart"
+      summary: "Get users cart"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Cart"
+        500:
+          description: "Error"
+    delete:
+      tags:
+      - "cart"
+      summary: "Delete the users cart"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      responses:
+        204:
+          description: "Success"
+        500:
+          description: "Error"
+  /cart/{productTitle}:
+    delete:
+      tags:
+      - "cart"
+      summary: "Remove quantity of product from users cart"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      - name: "productTitle"
+        in: "path"
+        description: "Title of product"
+        required: true
+        type: "string"
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: "object"
+          properties:
+            quantity:
+              type: "number"
+              description: "Quantity of product to remove from cart"
+      responses:
+        204:
+          description: "Success"
+        500:
+          description: "Error"
+    post:
+      tags:
+      - "cart"
+      summary: "Add quantity of product to users cart"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      - name: productTitle
+        in: path
+        description: "Title of product"
+        required: true
+        type: "string"
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: "object"
+          properties:
+            quantity:
+              type: "number"
+              description: "Quantity of product to add to cart"
+      responses:
+        204:
+          description: "Success, product and quantity added to users cart"
+        400:
+          description: "Product is out of inventory"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Product does not exist"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Error"
+  /cart/checkout:
+    post:
+      tags:
+      - "cart"
+      summary: "Checkout with users cart (purchase all products in users cart)"
+      parameters:
+      - name: authorization
+        in: header
+        description: "authorization header with JWT"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Success, all products where purchased"
+        400:
+          description: "Some/All of the products in the cart are out of inventory"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "User does not have a cart"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Error"
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+  Product:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+        description: "Title of the product"
+      price:
+        type: "number"
+        description: "Price of the product"
+      inventory_count:
+        type: "number"
+        description: "Number of product in inventory"
+  Cart:
+    type: "object"
+    description: "Object keys are the product title. Key value is the quantity of that product"
+  Error:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "message indicating the error"

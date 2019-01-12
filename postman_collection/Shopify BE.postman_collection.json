@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "dd4ec5a4-967c-4295-8737-a1c2dbca7aa5",
+		"name": "Shopify BE",
+		"description": "BE endpoints for Shopify Intern Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer NGY3NjYxOTE2YTRhNGMxNmJlNzBhODkxMTI4MTY2YTQ6NzkxYTE1NDI1Y2FjNDdjMWI2MDlmMGY3ZWY3OGVjYzA="
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "refresh_token",
+							"value": "AQDpOyhkWVAqKBJvXsMqeqnEGInHimDODPW-JChx1FA-stF9QjxBoHuNHzPmxOFkQGgYjjgODH62XTpuKIqCTBS9QEr8GJemKnTeN1TPUUtDJo6oyVFivICT3fzwnwRb3K0A",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/products",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"brad\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/register",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "12bf4341-cc74-4718-9564-bce5fa7b7bb2",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"token\", jsonData.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"brad\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/login",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify JWT Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{HOST}}/verify",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Only Available Products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer NGY3NjYxOTE2YTRhNGMxNmJlNzBhODkxMTI4MTY2YTQ6NzkxYTE1NDI1Y2FjNDdjMWI2MDlmMGY3ZWY3OGVjYzA="
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "refresh_token",
+							"value": "AQDpOyhkWVAqKBJvXsMqeqnEGInHimDODPW-JChx1FA-stF9QjxBoHuNHzPmxOFkQGgYjjgODH62XTpuKIqCTBS9QEr8GJemKnTeN1TPUUtDJo6oyVFivICT3fzwnwRb3K0A",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/products?available=true",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "available",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Single Product Purchase",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{HOST}}/purchase/chair",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"purchase",
+						"chair"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product to Cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"quantity\": 2\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/cart/chair",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"cart",
+						"chair"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users Cart",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"quantity\": 1\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/cart",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Product from Cart",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"quantity\": 1\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/cart/chair",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"cart",
+						"chair"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Users Cart",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"quantity\": 1\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/cart",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout Users Cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{HOST}}/cart/checkout",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"cart",
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

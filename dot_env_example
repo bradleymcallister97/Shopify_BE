@@ -1,0 +1,3 @@
+MONGO_CON_STR=mongodb://localhost/mydb
+PORT=8080
+PUBKEY=mysecret
