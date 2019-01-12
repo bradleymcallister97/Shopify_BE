@@ -2,7 +2,7 @@
 This is my repo for the backend developer intern challenge
 
 ## Description
-I have written my API using nodejs with mongodb as my database. The API uses JWT tokens as authentication for users. The API allows users to purchase a single product at a time. Or users can create a cart and add or remove products to it. Once the user is done shopping they can checkout with their cart. The API documentation is written in the [swagger.yaml](swagger.yaml) file. I have also included a [postman collection](postman_collection/Shopify BE.postman_collection.json) with all then endpoints.
+I have written my API using nodejs with mongodb as my database. The API uses JWT tokens as authentication for users. The API allows users to purchase a single product at a time. Or users can create a cart and add or remove products to it. Once the user is done shopping they can checkout with their cart. The API documentation is written in the [swagger.yaml](https://github.com/bradleymcallister97/Shopify_BE/blob/master/swagger.yml) file. I have also included a [postman collection](https://github.com/bradleymcallister97/Shopify_BE/blob/master/postman_collection/Shopify%20BE.postman_collection.json) with all then endpoints.
 ### Why node 
 I chose to use nodejs because it allowed me to quickly create this small API. However if this API was roadmapped to be large I would have chosen a different language and framework (like golang or ruby on rails) which is easier to maintain at a larger size.  
 ### Why mongodb
